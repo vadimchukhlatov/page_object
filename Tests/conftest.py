@@ -16,6 +16,7 @@ def base_url(request):
 
 @pytest.fixture
 def browser(request):
+    url = request.config.getoption('--base_url')
     browser_name = request.config.getoption("--browser")
     match browser_name:
         case "chrome":
@@ -29,5 +30,5 @@ def browser(request):
             raise Exception("Driver not supported")
     driver.maximize_window()
     request.addfinalizer(driver.quit)
-    yield driver
-    driver.close()
+    driver.get(url)
+    return driver

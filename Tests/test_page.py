@@ -1,27 +1,24 @@
 import random
+import time
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from page_objects.main_page import MainPage
+from page_objects.catalog_page import CatalogPage
 
 
 def test_mac_price(browser, base_url):
-    browser.get(base_url)
-    browser.find_element(By.CSS_SELECTOR, 'img[alt="MacBook"]').click()
-    assert WebDriverWait(browser, timeout=3).until(
-        ec.visibility_of_element_located((By.CSS_SELECTOR, '.price-new'))).text == '$602.00'
+    assert MainPage(browser).find_product_price() == '$602.00'
 
 
 def test_search_attr(browser, base_url):
-    browser.get(base_url)
-    WebDriverWait(browser, timeout=3).until(ec.visibility_of_element_located((By.NAME, 'search')))
+    MainPage(browser).find_search_input()
 
 
 def test_catalog_attr(browser, base_url):
-    browser.get(base_url)
-    browser.find_element(By.XPATH, "//a[text()='Software']").click()
-    assert WebDriverWait(browser, timeout=3).until(
-        ec.visibility_of_element_located((By.TAG_NAME, 'h2'))).text == 'Software'
+    MainPage(browser).navbar_menu_click('Software')
+    assert CatalogPage(browser).get_h2_catalog_text() == 'Software'
 
 
 def test_admin_page_attr(browser, base_url):
