@@ -6,47 +6,29 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from page_objects.main_page import MainPage
 from page_objects.catalog_page import CatalogPage
+from page_objects.header_page import HeaderPage
+from page_objects.register_page import RegisterPage
 
 
-def test_mac_price(browser, base_url):
+
+def test_mac_price(browser):
     assert MainPage(browser).find_product_price() == '$602.00'
 
 
-def test_search_attr(browser, base_url):
+def test_search_attr(browser):
     MainPage(browser).find_search_input()
 
 
-def test_catalog_attr(browser, base_url):
+def test_catalog_attr(browser):
     MainPage(browser).navbar_menu_click('Software')
     assert CatalogPage(browser).get_h2_catalog_text() == 'Software'
 
 
-def test_admin_page_attr(browser, base_url):
-    browser.get(base_url + '/administration')
-    WebDriverWait(browser, timeout=3).until(
-        ec.visibility_of_element_located((By.ID, 'input-username')))
-    browser.find_element(By.ID, 'input-password')
-
-
-def test_reg_page_attr(browser, base_url):
-    browser.get(base_url)
-    browser.find_element(By.CSS_SELECTOR, 'li:nth-child(2) span').click()
-    browser.find_element(By.CSS_SELECTOR, 'a[href*="register"]').click()
-    browser.find_element(By.CSS_SELECTOR, '.text-end button').click()
-    assert WebDriverWait(browser, timeout=3).until(ec.visibility_of_element_located(
-        (By.ID, 'error-password'))).text == 'Password must be between 4 and 20 characters!'
-
-
-def test_login(browser, base_url):
-    browser.get(base_url + '/administration/')
-    WebDriverWait(browser, timeout=3).until(
-        ec.visibility_of_element_located((By.ID, 'input-username'))).send_keys('user')
-    browser.find_element(By.ID, 'input-password').send_keys('bitnami')
-    browser.find_element(By.CSS_SELECTOR, '.text-end button').click()
-    WebDriverWait(browser, timeout=3).until(
-        ec.visibility_of_element_located((By.XPATH, "//div[contains(text(), 'Total Orders ')]")))
-    browser.find_element(By.CSS_SELECTOR, '.fa-sign-out').click()
-    WebDriverWait(browser, timeout=3).until(ec.visibility_of_element_located((By.ID, 'input-username')))
+def test_reg_page_attr(browser):
+    HeaderPage(browser).click_my_account_preview()
+    HeaderPage(browser).click_register_button()
+    RegisterPage(browser).click_continue_button()
+    assert RegisterPage(browser).find_password_error_text() == 'Password must be between 4 and 20 characters!'
 
 
 def test_add_to_cart(browser, base_url):
