@@ -1,17 +1,18 @@
-from page_objects.admin_page import AdminPage
+from page_objects.admin_page.admin_login_page import AdminLoginPage
+from page_objects.admin_page.admin_dashboard_page import AdminDashboardPage
 
 
 def test_admin_page_attr(browser, base_url):
-    AdminPage(browser).open_page(base_url + AdminPage.ADMIN_URL_PAGE)  # Или лучше сделать внутри страницы метод с переходом?
-    AdminPage(browser).find_username_input()
-    AdminPage(browser).find_password_input()
+    AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)  # Или лучше сделать внутри страницы метод с переходом?
+    AdminLoginPage(browser).find_username_input()
+    AdminLoginPage(browser).find_password_input()
 
 
 def test_login(browser, base_url):
-    AdminPage(browser).open_page(base_url + AdminPage.ADMIN_URL_PAGE)
-    AdminPage(browser).input_username('user')
-    AdminPage(browser).input_password('bitnami')
-    AdminPage(browser).click_login_button()
-    AdminPage(browser).find_total_order('Total Orders ')
-    AdminPage(browser).click_logout_button()
-    AdminPage(browser).find_username_input()
+    AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
+    AdminLoginPage(browser).input_username('user')
+    AdminLoginPage(browser).input_password('bitnami')
+    AdminLoginPage(browser).click_login_button()
+    AdminDashboardPage(browser).find_total_order('Total Orders ')
+    AdminDashboardPage(browser).click_logout_button()
+    AdminLoginPage(browser).find_username_input()
