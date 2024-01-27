@@ -24,3 +24,4 @@ class AlertSuccessElement:
     @property
     def comparison(self):
         return self.alert.find_element(*self.COMPARISON_LINK)
+

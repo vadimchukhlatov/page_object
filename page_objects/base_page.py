@@ -27,3 +27,6 @@ class BasePage:
         self.get_element(locator).clear()
         for l in text:
             self.get_element(locator).send_keys(l)
+
+    def get_alert(self, timeout=3):
+        WebDriverWait(self.browser, timeout).until(EC.alert_is_present()).accept()
