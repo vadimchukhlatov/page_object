@@ -7,6 +7,9 @@ class BasePage:
     def __init__(self, browser):
         self.browser = browser
 
+    def open_page(self, url):
+        self.browser.get(url)
+
     def _text_xpath(self, text):
         return f"//*[text()='{text}']"
 

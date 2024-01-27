@@ -1,73 +1,56 @@
-import random
-import time
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 from page_objects.main_page import MainPage
 from page_objects.catalog_page import CatalogPage
-from page_objects.header_page import HeaderPage
+from page_objects.alert_element import AlertSuccessElement
 from page_objects.register_page import RegisterPage
+from page_objects.cart_page import CartPage
 
 
+def test_mac_price(browser, base_url):
+    MainPage(browser).open_page(base_url)
+    assert MainPage(browser).find_products_price() == '$602.00'
 
-def test_mac_price(browser):
-    assert MainPage(browser).find_product_price() == '$602.00'
 
-
-def test_search_attr(browser):
+def test_search_attr(browser, base_url):
+    MainPage(browser).open_page(base_url)
     MainPage(browser).find_search_input()
 
 
-def test_catalog_attr(browser):
+def test_catalog_attr(browser, base_url):
+    MainPage(browser).open_page(base_url)
     MainPage(browser).navbar_menu_click('Software')
     assert CatalogPage(browser).get_h2_catalog_text() == 'Software'
 
 
-def test_reg_page_attr(browser):
-    HeaderPage(browser).click_my_account_preview()
-    HeaderPage(browser).click_register_button()
+def test_reg_page_attr(browser, base_url):
+    MainPage(browser).open_page(base_url)  # На сколько правильно каждый раз инициализировать класс, вместо присвоения в этой строке в переменную и уже дальнейшее использование
+    MainPage(browser).click_my_account_preview()
+    MainPage(browser).click_register_button()
     RegisterPage(browser).click_continue_button()
     assert RegisterPage(browser).find_password_error_text() == 'Password must be between 4 and 20 characters!'
 
 
 def test_add_to_cart(browser, base_url):
-    browser.get(base_url)
-    browser.execute_script('$("#carousel-banner-0").remove()')
-    good = random.choice(WebDriverWait(browser, timeout=3).until(
-        ec.visibility_of_all_elements_located((By.CSS_SELECTOR, 'button[formaction*="cart.add"]'))))
-    ActionChains(browser) \
-        .move_to_element(good) \
-        .click() \
-        .perform()
-    WebDriverWait(browser, timeout=2).until(ec.visibility_of_element_located((By.CSS_SELECTOR, '.btn-close'))).click()
-    browser.find_element(By.CSS_SELECTOR, 'a[href*="cart"]').click()
-    WebDriverWait(browser, timeout=2).until(ec.visibility_of_element_located((By.ID, 'shopping-cart')))
+    MainPage(browser).open_page(base_url)
+    browser.execute_script('$("#carousel-banner-0").remove()')  # Без удаления карусели выскакивает ошибка при клике Message: move target out of bounds
+    MainPage(browser).add_to_cart()
+    AlertSuccessElement(browser).shopping_cart.click()
+    CartPage(browser).wait_for_product_in_cart()
 
 
-def test_value_main(browser, base_url):
-    browser.get(base_url)
+def test_main_currency(browser, base_url):
+    MainPage(browser).open_page(base_url)
     browser.execute_script('$("#carousel-banner-0").remove()')
-    WebDriverWait(browser, timeout=2).until(
-        ec.visibility_of_element_located((By.CSS_SELECTOR, '#form-currency .d-none.d-md-inline'))).click()
-    WebDriverWait(browser, timeout=2).until(
-        ec.visibility_of_element_located((By.CSS_SELECTOR, f'a[href*="{random.choice(["EUR", "GBP"])}"]'))).click()
-    currency = WebDriverWait(browser, timeout=3).until(
-        ec.visibility_of_element_located((By.CSS_SELECTOR, '#form-currency strong'))).text
-    for price in WebDriverWait(browser, timeout=3).until(
-            ec.visibility_of_all_elements_located((By.CSS_SELECTOR, '.price .price-new'))):
-        print(price.text)
+    MainPage(browser).click_to_currency_list()
+    MainPage(browser).click_choice_currency('EUR')
+    currency = MainPage(browser).get_currency_icon_text()
+    for price in MainPage(browser).find_products_price(index=1):
         assert currency in price.text
 
 
-def test_value_catalog(browser, base_url):
-    browser.get(base_url + '/en-gb/catalog/component/monitor')
-    WebDriverWait(browser, timeout=2).until(
-        ec.visibility_of_element_located((By.CSS_SELECTOR, '#form-currency .d-none.d-md-inline'))).click()
-    WebDriverWait(browser, timeout=2).until(
-        ec.visibility_of_element_located((By.CSS_SELECTOR, f'a[href*="{random.choice(["EUR", "GBP"])}"]'))).click()
-    currency = WebDriverWait(browser, timeout=3).until(
-        ec.visibility_of_element_located((By.CSS_SELECTOR, '#form-currency strong'))).text
-    for price in WebDriverWait(browser, timeout=3).until(
-            ec.visibility_of_all_elements_located((By.CSS_SELECTOR, '.price .price-new'))):
+def test_catalog_currency(browser, base_url):
+    CatalogPage(browser).open_page(base_url + CatalogPage.CATALOG_URL_PAGE)
+    CatalogPage(browser).click_to_currency_list()
+    CatalogPage(browser).click_choice_currency('GBP')
+    currency = CatalogPage(browser).get_currency_icon_text()
+    for price in CatalogPage(browser).find_products_price(index=1):
         assert currency in price.text

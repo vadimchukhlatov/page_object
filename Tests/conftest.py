@@ -32,5 +32,4 @@ def browser(request):
             raise Exception("Driver not supported")
     driver.maximize_window()
     request.addfinalizer(driver.quit)
-    driver.get(url if use_admin else url + '/administration')
     return driver

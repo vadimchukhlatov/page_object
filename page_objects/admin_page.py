@@ -7,6 +7,7 @@ class AdminPage(BasePage):
     PASSWORD_INPUT = By.ID, 'input-password'
     LOGIN_BUTTON = By.CSS_SELECTOR, '.text-end button'
     LOGOUT_BUTTON = By.CSS_SELECTOR, '.fa-sign-out'
+    ADMIN_URL_PAGE = '/administration'
 
     def find_password_input(self):
         self.get_element(self.PASSWORD_INPUT)
