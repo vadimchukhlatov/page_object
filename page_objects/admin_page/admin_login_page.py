@@ -16,9 +16,12 @@ class AdminLoginPage(NavigationAdminMenuPage):
 
     def input_password(self, text: str):
         self.input_value(self.PASSWORD_INPUT, text)
+        return self
 
     def input_username(self, text: str):
         self.input_value(self.USERNAME_INPUT, text)
+        return self
 
     def click_login_button(self):
         self.click(self.LOGIN_BUTTON)
+        return self

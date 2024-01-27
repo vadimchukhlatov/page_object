@@ -10,9 +10,7 @@ def test_admin_page_attr(browser, base_url):
 
 def test_login(browser, base_url):
     AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
-    AdminLoginPage(browser).input_username('user')
-    AdminLoginPage(browser).input_password('bitnami')
-    AdminLoginPage(browser).click_login_button()
+    AdminLoginPage(browser).input_username('user').input_password('bitnami').click_login_button()
     AdminDashboardPage(browser).find_total_order('Total Orders ')
     AdminDashboardPage(browser).click_logout_button()
     AdminLoginPage(browser).find_username_input()
