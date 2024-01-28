@@ -22,16 +22,17 @@ def test_catalog_attr(browser, base_url):
 
 
 def test_reg_page_attr(browser, base_url):
-    MainPage(browser).open_page(base_url)  # На сколько правильно каждый раз инициализировать класс, вместо присвоения в этой строке в переменную и уже дальнейшее использование
+    MainPage(browser).open_page(base_url)
     MainPage(browser).click_my_account_preview()
     MainPage(browser).click_register_button()
     RegisterPage(browser).click_continue_button()
     assert RegisterPage(browser).find_password_error_text() == 'Password must be between 4 and 20 characters!'
 
 
+# Без удаления карусели выскакивает ошибка при клике move target out of bounds, проблема скорее всего в селекторе
 def test_add_to_cart(browser, base_url):
     MainPage(browser).open_page(base_url)
-    browser.execute_script('$("#carousel-banner-0").remove()')  # Без удаления карусели выскакивает ошибка при клике Message: move target out of bounds
+    browser.execute_script('$("#carousel-banner-0").remove()')
     MainPage(browser).add_to_cart()
     AlertSuccessElement(browser).shopping_cart.click()
     CartPage(browser).wait_for_product_in_cart()

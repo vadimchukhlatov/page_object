@@ -1,5 +1,4 @@
 import random
-import time
 from page_objects.admin_page.admin_dashboard_page import AdminDashboardPage
 from page_objects.admin_page.admin_login_page import AdminLoginPage
 from page_objects.admin_page.admin_products_page import AdminProductsPage
@@ -11,8 +10,7 @@ PASSWORD = 'bitnami'
 
 
 def test_admin_page_attr(browser, base_url):
-    AdminLoginPage(browser).open_page(
-        base_url + AdminLoginPage.ADMIN_URL_PAGE)  # Или лучше сделать внутри страницы метод с переходом?
+    AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
     AdminLoginPage(browser).find_username_input()
     AdminLoginPage(browser).find_password_input()
 
@@ -25,6 +23,7 @@ def test_login(browser, base_url):
     AdminLoginPage(browser).find_username_input()
 
 
+# Добавление данных о продукте можно сделать отдельным методом, который будет собственно собирать название, теги, модели
 def test_add_new_product(browser, base_url):
     AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
     AdminLoginPage(browser).input_username(USERNAME).input_password(PASSWORD).click_login_button()
@@ -42,6 +41,7 @@ def test_add_new_product(browser, base_url):
     AlertSuccessElement(browser)
 
 
+# Тест получается зависимым от предыдущего, т.к. в случае отсутствия продуктов, будет ошибка
 def test_delete_product(browser, base_url):
     AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
     AdminLoginPage(browser).input_username(USERNAME).input_password(PASSWORD).click_login_button()
