@@ -56,7 +56,3 @@ class AdminProductsPage(NavigationAdminMenuPage):
 
     def click_delete_button(self):
         self.click(self.DELETE_BUTTON)
-
-    def click_alert_accept(self):
-        self.get_alert_accept()
-
