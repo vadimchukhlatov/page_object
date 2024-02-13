@@ -10,13 +10,13 @@ PASSWORD = 'bitnami'
 
 
 def test_admin_page_attr(browser, base_url):
-    AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
+    AdminLoginPage(browser)._open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
     AdminLoginPage(browser).find_username_input()
     AdminLoginPage(browser).find_password_input()
 
 
 def test_login(browser, base_url):
-    AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
+    AdminLoginPage(browser)._open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
     AdminLoginPage(browser).input_username(USERNAME).input_password(PASSWORD).click_login_button()
     AdminLoginPage(browser).login_check()
     AdminLoginPage(browser).click_logout_button()
@@ -25,7 +25,7 @@ def test_login(browser, base_url):
 
 # Добавление данных о продукте можно сделать отдельным методом, который будет собственно собирать название, теги, модели
 def test_add_new_product(browser, base_url):
-    AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
+    AdminLoginPage(browser)._open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
     AdminLoginPage(browser).input_username(USERNAME).input_password(PASSWORD).click_login_button()
     AdminProductsPage(browser).click_product_page()
     AdminProductsPage(browser) \
@@ -43,7 +43,7 @@ def test_add_new_product(browser, base_url):
 
 # Тест получается зависимым от предыдущего, т.к. в случае отсутствия продуктов, будет ошибка
 def test_delete_product(browser, base_url):
-    AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
+    AdminLoginPage(browser)._open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
     AdminLoginPage(browser).input_username(USERNAME).input_password(PASSWORD).click_login_button()
     AdminDashboardPage(browser).click_product_page()
     AdminProductsPage(browser).click_choice_products()
@@ -53,7 +53,7 @@ def test_delete_product(browser, base_url):
 
 
 def test_add_new_user(browser, base_url):
-    AdminLoginPage(browser).open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
+    AdminLoginPage(browser)._open_page(base_url + AdminLoginPage.ADMIN_URL_PAGE)
     AdminLoginPage(browser).input_username(USERNAME).input_password(PASSWORD).click_login_button()
     AdminDashboardPage(browser).click_to_customers_page()
     AdminCustomersPage(browser).click_to_add_new_customer()
