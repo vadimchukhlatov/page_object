@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from page_objects.header_page import HeaderPage
+import allure
 
 
 class MainPage(HeaderPage):
@@ -7,6 +8,7 @@ class MainPage(HeaderPage):
     PRICE_NEW_PRODUCTS = By.CSS_SELECTOR, '.price-new'
     SEARCH_INPUT = By.NAME, 'search'
 
+    @allure.step("Выбираю '{index}' товар в листинге главной")
     def add_to_cart(self, index=0):
         if index == 0:
             self.click(self.ADD_TO_CART_BUTTON)
@@ -19,6 +21,7 @@ class MainPage(HeaderPage):
         else:
             return self.get_elements(self.PRICE_NEW_PRODUCTS)
 
+    @allure.step("Ищу поисковую строку")
     def find_search_input(self):
         self.get_element(self.SEARCH_INPUT)
 
