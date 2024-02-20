@@ -2,11 +2,13 @@ import json
 import os
 import random
 import time
-
 import allure
 import pytest
 import requests
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
 
 
 def pytest_addoption(parser):
@@ -64,11 +66,11 @@ def browser(request):
     executor_url = f"http://{executor}:4444/wd/hub"
     match browser:
         case "chrome":
-            options = webdriver.ChromeOptions()
+            options = ChromeOptions()
         case "edge":
-            options = webdriver.EdgeOptions()
+            options = EdgeOptions()
         case "firefox":
-            options = webdriver.FirefoxOptions()
+            options = FirefoxOptions()
         case _:
             raise Exception("Driver not supported")
 
