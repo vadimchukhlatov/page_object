@@ -17,7 +17,7 @@ class BasePage:
         os.makedirs("logs", exist_ok=True)
         if to_file:
             self.logger.addHandler(logging.FileHandler(f"logs/{self.browser.test_name}.log"))
-        self.logger.setLevel(level=self.browser.log_level)
+        # self.logger.setLevel(level=self.browser.log_level)
 
     def _open_page(self, url):
         self.logger.info(f"Open {url}")
